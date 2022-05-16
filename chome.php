@@ -1,7 +1,13 @@
 <?php
+ob_start();
 session_start();
 include 'config.php';
 $fetchuser = $_SESSION['userid'];
+if (isset($fetchuser) == null) {
+    header('Location: index.php');
+} else if (empty($fetchuser)) {
+    header('Location: index.php');
+}
 $query = "SELECT * FROM `users` WHERE `id`=$fetchuser";
 $res = $conn->query($query);
 if ($res->num_rows > 0) {
@@ -161,11 +167,69 @@ if ($res->num_rows > 0) {
                         <a class="navbar-brand btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#reportmodal">R</a>
                         <a class="navbar-brand btn btn-success" href="viewrecord.php">R</a>
                         <a class="navbar-brand btn btn-primary" href="#">H</a>
-                        <a class="navbar-brand btn btn-success" href="#">C</a>
+                        <a class="navbar-brand btn btn-success" href="#" data-bs-toggle="modal" data-bs-target="#modaldocs">C</a>
                         <a class="navbar-brand btn btn-primary" href="profile.php">P</a>
                     </div>
                 </nav>
             </footer>
+
+            <?php
+            if (isset($_POST['viewdoc'])) {
+                $docname = $_POST['docname'];
+                $redirecturldoc = 'docprofile.php?a=' . $docname;
+                header('Location:' . $redirecturldoc . '');
+            }
+            ?>
+
+            <!-- Doc Modal -->
+            <div class="modal fade" id="modaldocs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 mt-3">
+                                            <div class="form-floating">
+                                                <select class="form-select" name="docname" id="floatingSelect" aria-label="Floating label select example">
+                                                    <?php
+                                                    $querydoc = "SELECT * FROM `docs`";
+                                                    $docres = $conn->query($querydoc);
+                                                    if ($docres->num_rows > 0) {
+                                                        while ($drow = $docres->fetch_assoc()) {
+                                                    ?>
+                                                            <option value="<?php echo $drow['id']; ?>"><?php echo 'Dr. ' . $drow['name']; ?></option>
+                                                        <?php
+                                                        }
+                                                    } else {
+                                                        ?>
+                                                        <option value="#">Sorry No Doctors Availabe</option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <label for="floatingSelect">Search A Doctor</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <button type="submit" name="viewdoc" class="btn btn-primary w-100">View Doctor</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END -->
 
             <!-- Report Modal -->
             <div class="modal fade" id="reportmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

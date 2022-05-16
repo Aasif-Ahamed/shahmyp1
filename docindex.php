@@ -29,6 +29,7 @@ $mail = new PHPMailer(true);
     if (isset($_POST['loginbtn'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
+        $codepassword = $_POST['codepassword'];
 
         if ($email == null || empty($email) || $email == '') {
     ?>
@@ -47,15 +48,24 @@ $mail = new PHPMailer(true);
                     content: 'Please Enter Your Password!',
                 });
             </script>
+        <?php
+        } else if ($codepassword == null || empty($codepassword) || $codepassword == '') {
+        ?>
+            <script>
+                $.alert({
+                    title: 'Warning',
+                    content: 'Please Enter Your Code!',
+                });
+            </script>
             <?php
         } else {
-            $query = "SELECT * FROM `users` WHERE `email`= '$email' AND `password`= '$password'";
+            $query = "SELECT * FROM `docs` WHERE `email`= '$email' AND `password`= '$password' AND `code` = '$codepassword'";
             $res = $conn->query($query);
             if ($res->num_rows > 0) {
                 while ($qrow = $res->fetch_assoc()) {
                     $userid = $qrow['id'];
                     $_SESSION['userid'] = $userid;
-                    header('Location:chome.php');
+                    header('Location:dhome.php');
                 }
             } else {
             ?>
@@ -220,15 +230,19 @@ $mail = new PHPMailer(true);
                                         <label for="floatingInput" style="color:black;">Password</label>
                                     </div>
                                 </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <div class="form-floating mb-3">
+                                        <input type="password" name="codepassword" class="form-control" id="floatingInput" placeholder="********" style="color:black;">
+                                        <label for="floatingInput" style="color:black;">Code</label>
+                                    </div>
+                                </div>
                                 <button class="btn btn-success btn-lg w-100 px-5" type="submit" name="loginbtn">Login</button>
                             </form>
 
                             <div class="row">
                                 <div class="col-md-12 mt-3 mb-3">
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#signupmodal" class="btn btn-secondary btn-sm w-100">Get Registered Now</button>
-                                </div>
-                                <div class="col-md-12 mt-1">
-                                    <a href="docindex.php" class="text-white">Professional ?</a>
                                 </div>
                             </div>
                         </div>

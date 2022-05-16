@@ -109,23 +109,44 @@ if ($res->num_rows > 0) {
         </head>
 
         <body>
-            <?php include 'clientnav.html'; ?>
-            <div class="container mb-4 p-3 d-flex justify-content-center">
-                <div class="card p-4">
-                    <div class=" image d-flex flex-column justify-content-center align-items-center">
-                        <button class="btn btn-secondary"> <img src="https://i.imgur.com/wvxPV9S.png" height="100" width="100" /></button>
-                        <span class="name mt-3"><?php echo $urow['salutation'] . '. ' . $urow['fullname']; ?></span>
-                        <span class="idd"><?php echo $urow['email']; ?></span>
-                        <br>
-                        <p>Date of Birth - <?php echo date('F j, Y', strtotime($urow['dob'])); ?></p><br>
+            <?php
+            include 'clientnav.html';
+
+            $docid = $_GET['a'];
+            $docquery = "SELECT * FROM `docs` WHERE `id`='$docid'";
+            $docres = $conn->query($docquery);
+            if ($docres->num_rows > 0) {
+                while ($drow = $docres->fetch_assoc()) {
+            ?>
+                    <div class="container mb-4 p-3 d-flex justify-content-center">
+                        <div class="card p-4">
+                            <div class=" image d-flex flex-column justify-content-center align-items-center">
+                                <span class="name mt-3"><?php echo 'Dr. ' . $drow['name']; ?></span>
+                                <span class="idd"><?php echo $drow['exp_years'] . ' of Experience'; ?></span>
+                                <br>
 
 
-                        <div class="text mt-3"> <span>Eleanor Pena is a creator of minimalistic x bold graphics and digital artwork.<br><br> Artist/ Creative Director by Day #NFT minting@ with FND night. </span> </div>
-                        <div class="gap-3 mt-3 icons d-flex flex-row justify-content-center align-items-center"> <span><i class="fa fa-twitter"></i></span> <span><i class="fa fa-facebook-f"></i></span> <span><i class="fa fa-instagram"></i></span> <span><i class="fa fa-linkedin"></i></span> </div>
-                        <div class=" px-2 rounded mt-4 date "> <span class="join">Joined May,2021</span> </div>
+                                <div class="text mt-3"> <span><?php echo 'Dr. ' . $drow['name']; ?> has completed <?php echo $drow['highest_qual']; ?> at <?php echo $drow['institue']; ?> and is currently specializing in <?php echo $drow['doc_spcial']; ?><br><br>
+                                        Doctor Bio
+                                        <hr><?php echo $drow['bio']; ?>
+                                    </span>
+                                </div>
+                                <br><br>
+                                <div class="gap-3 mt-3 icons d-flex flex-row justify-content-center align-items-center">
+                                    <span><a href="tel:<?php echo $drow['contact'] ?>"><i class="fa-solid fa-phone"></i></a></span>
+                                    <span><a href="mailto:<?php echo $drow['email']; ?>"><i class="fa-solid fa-envelope"></i></a></span>
+                                    <br><br>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+            <?php
+                }
+            } else {
+                echo 'Some Internal Error Occured';
+            }
+            ?>
             <?php include 'bootstrapjs.html'; ?>
         </body>
 
