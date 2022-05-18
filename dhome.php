@@ -46,6 +46,7 @@ if ($res->num_rows > 0) {
 
         <body>
             <?php
+            include 'docnav.html';
             if (isset($_POST['startbtn'])) {
                 $ptime = $_POST['ptime'];
                 $tname = $_POST['tname'];
@@ -106,7 +107,7 @@ if ($res->num_rows > 0) {
             <footer>
                 <nav class="navbar fixed-bottom bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand btn btn-primary btn-sm" href="#">Patients</a>
+                        <a class="navbar-brand btn btn-primary btn-sm" href="crecs.php">Client Recordings</a>
                         <a class="navbar-brand btn btn-success btn-sm" href="#">Home</a>
                         <a class="navbar-brand btn btn-primary btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#modalappoint">Appointments</a>
                         <a class="navbar-brand btn btn-danger btn-sm" href="logout.php">Logout</a>

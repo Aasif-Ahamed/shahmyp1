@@ -61,11 +61,13 @@ if ($fetchres->num_rows > 0) {
                                     </td>
                                 <?php
                                 } else {
-                                    echo $srecs['score'];
+                                ?>
+                                    <td><?php echo $srecs['score']; ?></td>
+                                <?php
                                 }
                                 ?>
                                 <td class="text-center">
-                                    <a href="viewdata.php?a=<?php echo $srecs['id']; ?>" class="btn btn-primary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                                    <a href="viewdata.php?a=<?php echo $srecs['uploadid']; ?>" class="btn btn-primary btn-sm"><i class="fa-solid fa-eye"></i></a>
                                 </td>
                             </tr>
                         <?php

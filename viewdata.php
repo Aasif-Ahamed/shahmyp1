@@ -23,7 +23,7 @@ if ($res->num_rows > 0) {
             include 'clientnav.html';
 
             $recordid = $_GET['a'];
-            $queryrec = "SELECT * FROM `cuploads` WHERE `id`='$recordid'";
+            $queryrec = "SELECT * FROM `cuploads` WHERE `uploadid`='$recordid'";
             $recqueryres = $conn->query($queryrec);
             if ($recqueryres->num_rows > 0) {
                 while ($recordrow = $recqueryres->fetch_assoc()) {
