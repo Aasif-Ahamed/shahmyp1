@@ -55,7 +55,7 @@ $mail = new PHPMailer(true);
                 while ($qrow = $res->fetch_assoc()) {
                     $userid = $qrow['id'];
                     $_SESSION['userid'] = $userid;
-                    header('Location:chome.php');
+                    header('Location: chome.php');
                 }
             } else {
             ?>

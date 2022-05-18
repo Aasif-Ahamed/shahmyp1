@@ -36,7 +36,25 @@ if ($res->num_rows > 0) {
                 header('Location: ' . $redirecturl . '');
             }
             ?>
+
             <div class="row mx-auto my-auto text-center mt-4 mb-4">
+                <div class="col-md-12 mt-4 mb-4">
+                    <?php
+                    $queryval = "SELECT * FROM `dc_assign` WHERE `uid`='$fetchuser' AND `expired`=0";
+                    $queryvalres = $conn->query($queryval);
+                    if ($queryvalres->num_rows > 0) {
+                    ?>
+                        Connected <i class="fa-solid fa-circle-check" style="color:green;"></i>
+                    <?php
+                    } else {
+                    ?>
+                        <div class="alert alert-danger" role="alert">
+                            You Haven't Registred With A Doctor Yet<br><a href="doconnect.php" class="btn btn-primary btn-sm">Connect Now</a>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
                 <div class="col-md-6 mb-4 mt-3">
                     <div class="card">
                         <div class="card-body">

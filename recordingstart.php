@@ -104,6 +104,7 @@ if ($fetchuser->num_rows > 0) {
             <?php
             include 'pnav.php';
             if (isset($_POST['audiosub'])) {
+                $docselect = $_POST['docselect'];
                 $audiodesc = $_POST['audiodesc'];
                 /* Audio */
                 $file = $_FILES['audiof'];
@@ -121,8 +122,8 @@ if ($fetchuser->num_rows > 0) {
                         $fileDestination = 'ClientAudio/' . $fileNameNew;
                         move_uploaded_file($fileTmpName, $fileDestination);
 
-                        $uploadstmt = $conn->prepare('INSERT INTO `cuploads`(`uid`,`clabel`, `cpath`) VALUES (?,?,?)');
-                        $uploadstmt->bind_param('sss', $fetchedid, $audiodesc, $fileDestination);
+                        $uploadstmt = $conn->prepare('INSERT INTO `cuploads`(`uid`,`did`,`clabel`, `cpath`) VALUES (?,?,?,?)');
+                        $uploadstmt->bind_param('ssss', $fetchedid, $docselect, $audiodesc, $fileDestination);
                         if ($uploadstmt->execute() === TRUE) {
             ?>
                             <script>
@@ -181,6 +182,32 @@ if ($fetchuser->num_rows > 0) {
                         <div class="modal-body">
                             <form method="post" enctype='multipart/form-data'>
                                 <div class="container">
+                                    <div class="col-md-12 mt-3 mb-3">
+                                        <div class="alert alert-success" role="alert">
+                                            Select Whom To Send This Audio
+                                        </div>
+                                        <p>Note : If already connected doctors are not availabe in the list below that would be mean the doctor is not availabe at the moment. Once the doctor is back and has turned on availability the doctor will be listed below</p>
+                                        <div class="form-floating">
+                                            <select class="form-select" name="docselect" id="floatingSelect" aria-label="Floating label select example">
+                                                <?php
+                                                $querydocs = "SELECT docs.*, dc_assign.docid,dc_assign.uid,dc_assign.expired FROM docs INNER JOIN dc_assign ON docs.id = dc_assign.docid WHERE dc_assign.uid=$fetchedid AND docs.availabe=1";
+                                                $querydocsres = $conn->query($querydocs);
+                                                if ($querydocsres->num_rows > 0) {
+                                                    while ($docresrow = $querydocsres->fetch_assoc()) {
+                                                ?>
+                                                        <option value="<?php echo $docresrow['id'] ?>"><?php echo $docresrow['name']; ?></option>
+                                                    <?php
+                                                    }
+                                                } else {
+                                                    ?>
+                                                    <option value="-">No Doctors Availabe</option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                            <label for="floatingSelect">Choose Doctor</label>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <div class="alert alert-warning" role="alert">
                                             Only One Audio File At A Time
